@@ -6,6 +6,12 @@ var Tiles = {
 	Wall: Symbol("Wall"),
 }
 
+var Status = {
+	Playing: Symbol("Playing"),
+	Lost: Symbol("Lost"),
+	Won: Symbol("Won")
+}
+
 function pick(ar){
 	return ar[Math.random() * ar.length |0];
 }
@@ -31,6 +37,7 @@ class World {
 		this.width = width;
 		this.height = height;
 		this.max = max;
+		this.status = Status.Playing;
 		this.tiles = new Grid(this.width, this.height);
 		this.tiles.fill(Tiles.Empty);
 		this.tiles.fill_borders(Tiles.Wall);
@@ -56,12 +63,17 @@ class World {
 		this.player.y = y;
 		this.tiles.set(x, y, Tiles.Empty);
 		this.draw();
-		if (x + 1 == this.width){
+		if (x + 1 >= this.width){
 			console.log("Congratulations");
+			this.status = Status.Won;
+			this.draw()
 		}
 	}
 	
 	update(n){
+		if (this.status != Status.Playing){
+			return;
+		}
 		for (let d of neighbours){
 			let x = this.player.x + d[0];
 			let y = this.player.y + d[1];
@@ -96,6 +108,13 @@ class World {
 				ctx.fillText(val, (x+0.25)*this.tile_size, (y+0.8)*this.tile_size);
 			}
 		});
+		if (this.status == Status.Won){
+			ctx.fillStyle = "#00ff0044";
+			ctx.fillRect(0, 0, canvas.width, canvas.height);
+		} else if (this.status == Status.Lost){
+			ctx.fillStyle = "#ff000044";
+			ctx.fillRect(0, 0, canvas.width, canvas.height);
+		}
 	}
 }
 
