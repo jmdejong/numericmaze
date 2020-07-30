@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8" />
+	<script src="grid.js"></script>
+	<script src="nummaze.js"></script>
+</head>
+<style>
+#output {
+	border: 3px solid black;
+	padding: 5px;
+}
+body {
+	text-align: center;
+}
+</style>
+<body>
+	<div>
+		<canvas id="output" width=600 height=400></canvas>
+	</div>
+	<div>
+		<button onclick="restart()">Restart</button>
+	</div>
+	<div>
+		<span>
+			Width:
+			<input id="fieldwidth" type="number" value=26 />
+		</span>
+		<span>
+			Height:
+			<input id="fieldheight" type="number" value=18 />
+		</span>
+		<span>
+			max:
+			<input id="maxnumber" type="number" value=6 />
+		</span>
+	</div>
+</body>
+</html>
