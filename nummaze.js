@@ -33,10 +33,11 @@ class World {
 	
 	tile_size = 24;
 	
-	constructor(width, height, max){
+	constructor(width, height, max, time){
 		this.width = width;
 		this.height = height;
 		this.max = max;
+		this.time = time;
 		this.status = Status.Playing;
 		this.tiles = new Grid(this.width, this.height);
 		this.tiles.fill(Tiles.Empty);
@@ -82,6 +83,25 @@ class World {
 				return;
 			}
 		}
+		this.time -= 3;
+		this.updateTime();
+	}
+	
+	countDown(){
+		if (this.status != Status.Playing){
+			return;
+		}
+		--this.time;
+		this.updateTime();
+	}
+	
+	updateTime(){
+		document.getElementById("timer").innerHTML = this.time;
+		if (this.time <= 0){
+			console.log("Game Over");
+			this.status = Status.Lost;
+			this.draw();
+		}
 	}
 	
 	draw(){
@@ -119,14 +139,17 @@ class World {
 }
 
 var world;
+var interval;
+
 function gv(id){
 	return document.getElementById(id).value|0;
 }
 
 function restart(){
-	world = new World(gv("fieldwidth"), gv("fieldheight"), Math.min(gv("maxnumber")+1, 10));
-	console.log(world);
+	clearInterval(interval);
+	world = new World(gv("fieldwidth"), gv("fieldheight"), Math.min(gv("maxnumber")+1, 10), gv("timing"));
 	world.draw();
+	setInterval(()=>world.countDown(), 1000)
 }
 
 
